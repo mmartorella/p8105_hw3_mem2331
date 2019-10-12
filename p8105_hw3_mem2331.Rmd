@@ -35,6 +35,7 @@ theme_set(theme_bw())
 
 The Instacart data from 2017 has **`r nrow(instacart)`** orders, and it describes these orders with **`r ncol(instacart)`** variables, some of which are: _order_id_, _product_id_, _product_name_, whether it was _reordered_, and the _department_id_ and _aisle_. There are 134 aisles, and the fresh vegetable and fresh fruit aisles are ordered from the most.
 
+## Plot of Most Popular Aisles
 
 ```{r include = FALSE}
 
@@ -61,13 +62,14 @@ instacart %>%
 
 ```
 
+## Three most popular items from select aisles
 
-Make a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”. Include the number of times each item is ordered in your table.
+The number of times the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits” are ordered is presented in the following table:
 
 ```{r}
 
 instacart %>% 
-  filter(aisle == c("baking ingredients", 
+  filter(aisle %in% c("baking ingredients", 
                     "dog food care", 
                     "packaged vegetables fruits")) %>% 
   group_by(aisle) %>% 
@@ -76,6 +78,42 @@ instacart %>%
   pivot_wider(names_from = aisle,
               values_from = n) %>% 
   knitr::kable()
+
+```
+
+## Ordering Day/Time of Pink Lady Apples vs Coffee Ice Cream
+
+The following is a table showing the mean hour of the day per each day of the week that Pink Lady Apples and Coffee Ice Cream are ordered.
+
+```{r}
+
+instacart %>% 
+  filter(product_name %in% c("Pink Lady Apples",
+                           "Coffee Ice Cream")) %>% 
+  group_by(product_name, order_dow) %>% 
+  mutate(mean_hour = mean(order_hour_of_day)) %>% 
+  select(c(product_name, 
+           order_dow, 
+           mean_hour)) %>%
+  distinct() %>% 
+  pivot_wider(names_from = order_dow, 
+              values_from = mean_hour) %>% 
+  rename(Monday = '0',
+         Tuesday = '1',
+         Wednesday = '2',
+         Thursday = '3',
+         Friday = '4',
+         Saturday = '5',
+         Sunday = '6') %>%
+  select(product_name, 
+         Monday, 
+         Tuesday, 
+         Wednesday, 
+         Thursday, 
+         Friday, 
+         Saturday, 
+         Sunday) %>% 
+  knitr::kable(digits = 1)
 
 ```
 
