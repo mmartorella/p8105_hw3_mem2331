@@ -1,0 +1,68 @@
+---
+title: "P8105 - Homework 3"
+author: "Molly Martorella"
+date: "10/12/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+
+library(tidyverse)
+library(viridis)
+library(p8105.datasets)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.width = 8,
+  fig.height = 6,
+  out.width = "90%")
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_color_discrete = scale_color_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+
+theme_set(theme_bw())
+
+```
+
+# Problem 1
+
+The Instacart data from 2017 has **`r nrow(instacart)`** orders, and it describes these orders with **`r ncol(instacart)`** variables, some of which are: _order_id_, _product_id_, _product_name_, whether it was _reordered_, and the _department_id_ and _aisle_. There are 134 aisles, and the fresh vegetable and fresh fruit aisles are ordered from the most.
+
+
+```{r include = FALSE}
+
+data("instacart")
+
+instacart %>% 
+  count(aisle)
+
+# 134 aisles
+```
+
+```{r}
+
+instacart %>% 
+  count(aisle, sort = TRUE) %>% 
+  filter(n > 10000) %>% 
+  ggplot(aes(x = reorder(aisle, -n), y = n)) +
+  geom_col() +
+  ggtitle("Number of Instacart Orders by Aisle") +
+  xlab("Aisle") +
+  ylab("Number of Items Ordered") +
+  theme(axis.text.x = element_text(angle = 60, 
+                                   hjust = 1))
+
+```
+
+
+Make a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”. Include the number of times each item is ordered in your table.
+
+
+
+
+
